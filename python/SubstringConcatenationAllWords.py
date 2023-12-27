@@ -13,47 +13,49 @@ def clear_ith_bit(number: int, i: int) -> int:
     return number_with_bit_cleared
 
 class Solution(object):
+
     def findSubstring(self, s: str, words: List[str]) -> List[int]:
-       
+
         window_len = len(words[0])
         total_len = window_len * len(words)
         word_map = {}
         for i in range(len(words)):
-            word_map[words[i]] = i
-        sw = [[0 for _ in range(len(words))] for _ in range(window_len)]
+            p = word_map.get(words[i], 0)
+            word_map[words[i]] = p+1
+        sw = [{} for _ in range(window_len)]
         ans = []
-
+        # print(word_map)
         for i in range(len(s)):
-            print("hi", i)
-            print(sw)
+            # print("hi", i)
+            # print(sw)
             substring = s[i:i+window_len]
             if len(substring) < window_len: break
-            val = word_map.get(substring, -1)
 
             window_pos = i % window_len
-            if i < total_len:
-                if val >= 0: sw[window_pos][val] += 1
-            else: 
-                prev = i - total_len
-                prev_val = word_map.get(s[prev : prev+window_len], -1)
-                if prev_val >= 0:
-                    sw[window_pos][prev_val] -= 1
-                if val >= 0: sw[window_pos][val] += 1
+            if substring in word_map:
+                p = sw[window_pos].get(substring, 0)
+                sw[window_pos][substring] = p + 1
 
-            
+            if i >= total_len: 
+                prev = i - total_len
+                prev_word = s[prev : prev + window_len]
+                if prev_word in word_map:
+                    sw[window_pos][prev_word] -= 1
+
 
             valid = True
-            for arr in sw[window_pos]:
-                if arr != 1: valid = False
+            for key, value in word_map.items():
+                # print(key, value)
+                if value != sw[window_pos].get(key, -1): valid = False
 
             if valid:
+                # print(i)
                 ans.append(i - total_len + window_len)
 
         return ans
 
 
 def main():
-    # Creating a Solution instance
     solution = Solution()
 
     # Calling the canCross method and printing the result
