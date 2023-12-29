@@ -22,16 +22,11 @@ class Solution(object):
 
 
 def main():
-    # Accepting space-separated numbers from user input
     user_input = input()
-
-    # Converting the input string into a list of integers
     stones_list = [int(item) for item in user_input.split()]
 
-    # Creating a Solution instance
     solution = Solution()
 
-    # Calling the canCross method and printing the result
     print(solution.canCross(stones_list))
 
 
